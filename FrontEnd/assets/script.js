@@ -51,8 +51,8 @@ const categorie = document.getElementsByClassName("categorie");
 var getCategoriesByID = function(evt) {
 
   const myID = evt.currentTarget.id;
-  gallery.replaceChildren();
 
+  gallery.replaceChildren();
 
   fetch('http://localhost:5678/api/works')
   .then(response => response.json())
@@ -60,7 +60,7 @@ var getCategoriesByID = function(evt) {
 
     for (let i = 0; i < data.length; i++) {
 
-      if(myID == data[i].categoryId){
+      if(myID == data[i].categoryId || myID == 0){
         const figure = document.createElement("figure");
         const image = document.createElement("img");
         const figcaption = document.createElement("figcaption");
@@ -72,19 +72,7 @@ var getCategoriesByID = function(evt) {
         figure.appendChild(image);
         figure.appendChild(figcaption);
         gallery.appendChild(figure);
-      }else if(myID == 0) {
-        const figure = document.createElement("figure");
-        const image = document.createElement("img");
-        const figcaption = document.createElement("figcaption");
-  
-        figcaption.innerHTML = data[i].title;
-        image.src = data[i].imageUrl;
-        image.alt = data[i].title;
-  
-        figure.appendChild(image);
-        figure.appendChild(figcaption);
-        gallery.appendChild(figure);
-      } 
+      }
     }
     
   });
