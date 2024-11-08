@@ -81,7 +81,7 @@ a {
 	all: unset;
   }
   
-.categorie { 
+.category { 
 		height: 35px;
 		font-weight: bold;
 		padding-right: 20px;
@@ -105,7 +105,7 @@ a {
     justify-content: center;
 }
 
-#categories .actif{
+#categories .selectedCategory{
 	background-color:#1D6154;
 	color : white;
 
