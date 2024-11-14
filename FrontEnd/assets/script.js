@@ -83,16 +83,6 @@ logout.addEventListener('click', () => {
   window.localStorage.removeItem("loginToken");
 });
 
-if(loginToken == undefined){
-  logout.style.display = "none";
-  header.style.display = "none";
-  getcategories();
-}else{
-   login.style.display = "none";
-   categories.style.display = "none";
-}
-
-
 
 
 // Get the modal
@@ -120,3 +110,15 @@ window.onclick = function(event) {
     modal.style.display = "none";
   }
 } 
+
+
+if(loginToken == undefined){
+  logout.style.display = "none";
+  header.style.display = "none";
+  btn.style.display = "none";
+  getcategories();
+}else{
+   login.style.display = "none";
+   categories.style.display = "none";
+}
+
