@@ -80,6 +80,7 @@ h1{
 	color:black;
 	font-size: 14px;
 	padding-left: 14px;
+	cursor: pointer;
 }
 
 h1 > span {
@@ -264,6 +265,8 @@ footer nav ul {
 	float: right;
 	font-size: 28px;
 	font-weight: bold;
+	position: absolute;
+	right: 0;
   }
   
   .close:hover,
@@ -281,11 +284,145 @@ footer nav ul {
   .line {
 	border-bottom:1px solid gray;
 	margin-top: 40px;
-	width: 350px;
-	margin-left: 50px;
 
   }
 
   .add {
 	text-align: center;
   }
+
+  #onee{
+	position: relative;
+  }
+
+  .fa-trash {
+	position: absolute;
+	z-index: 2;
+	margin-left: 24%;
+  	margin-top: 3%;
+  	cursor: pointer;
+}
+
+
+.image-upload-button {
+	display: inline-block;
+	padding: 10px 20px;
+	background-color:#45a049;
+	color: white;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	font-size: 16px;
+}
+.image-upload-button:hover {
+	background-color: #45a049;
+}
+
+
+.hidden {
+	display: none;
+}
+
+
+.container{
+	position: relative;
+}
+
+
+.fa-xmark{
+	position: absolute;
+	right: 0;
+	top: 0;
+
+}
+
+.fa-arrow-left{
+	position: absolute;
+	top : 0;
+	left: 0;
+}
+
+.fa-arrow-left, .fa-xmark, #open2, ul li {
+
+	&:hover{
+		cursor: pointer;
+
+	}
+}
+
+.block{
+	display: inline-block;
+	margin: 2px;
+	margin-top: 7px;
+}
+
+.upload-box {
+	text-align: center;
+	margin-bottom: 20px;
+}
+.upload-preview {
+	position: relative;
+	padding: 20px;
+	border-radius: 8px;
+	border: 2px;
+}
+.upload-button {
+	background-color: #c2c7cb;
+	color: white;
+	padding: 10px 15px;
+	border-radius: 40px;
+	cursor: pointer;
+	margin-top: 10px;
+}
+.upload-button :hover {
+ background-color : #0056b3;
+}
+.file-info {
+	margin-top: 10px;
+}
+
+
+
+.uploadimageBloc {
+	height: 200px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: #dfebf3;
+	flex-direction: column;
+  	gap: 10px;
+	margin-bottom: 15px;
+  }
+  
+  .itemImage {
+	width: 10em;
+  }
+
+  .itemText {
+	font-size: small;
+  }
+
+  .fa-image{
+	color: #c2c7cb;
+  }
+
+  #formImage {
+	display: flex;
+	flex-direction: column;
+	gap: 14px;
+  }
+
+  #category {
+	background-color: white;
+  }
+
+
+.shadow {
+	box-shadow: 0 5px 3px rgba(0, 0, 0, 0.034);
+  	border-color: white;
+}
+
+#image-preview img{
+	height: 100%;
+  	width: 100%;
+}
