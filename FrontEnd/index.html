@@ -47,50 +47,50 @@
 
 		<!-- Modal content -->
 		<div class="modal-content">
-
-			<div id="onee">
-				<span class="close">&times;</span>
+			<span id="close">&times;</span>
+			<div id="firstModalContent">
+				
 				<div class="modal-title">Galerie Photo</div>
-				<div class="gallery" id="modal_gallery"></div>
+				<div class="modal_gallery" id="modal_gallery"></div>
 				<div class="line"> </div>
 				<div class="add">
 					<input type="submit" id="addImage" value="Ajouter une Photo"></input>
 				</div>
-
 			</div>
 
 
 			<div class="upload-image hidden container" id="bloc-image">
 				<div class="block">
 					<i id="fa-arrow-left" class="fa-solid fa-arrow-left"></i>
-					<span class="close">&times;</span>
 				</div>
 
 				<div class="modal-title">Ajout photo</div>
 
-				<div class="uploadimageBloc" id="image-preview">
+				<div class="uploadimageBloc imagehidden" id="image-preview">
+
+				</div>
+				<div class="uploadimageBloc" id="image-upload-bloc">
 					<i class="fa-solid fa-image fa-5x"></i>
 					<label for="image-upload" class="upload-button itemImage">
 						+ Ajouter photo
 					</label>
-					<input type="file" id="image-upload" class="itemImage" accept="image/*" style="display: none;">
+					<input type="file" id="image-upload" class="imagehidden" accept="image/*" >
 					<p class="itemText">jpg, png : 4mo max</p>
-
 				</div>
 
 
-				<form id="formImage">
+				<form id="formImage" action="#">
 					<label for="title">Title</label>
 					<input type="text" id="title" name="title" class="shadow" />
 
 					<label for="category">catégorie</label>
 					<select id="category" name="category" class="shadow">
-
+					<option value="0"></option>
 					</select>
 
 					<div class="line"> </div>
 					<div class="add">
-						<input type="submit" id="addImage2" value="Valider"></input>
+						<input type="submit" id="submit" value="Valider"></input>
 					</div>
 			</div>
 			</form>

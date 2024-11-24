@@ -45,6 +45,7 @@ function displayWorks(works) {
 
         event.target.style.display = "none";
         const filtredWorks = allWorks.filter(work => work.id != eventId);
+        allWorks = filtredWorks;
         displayWorks(filtredWorks);
           
         })
@@ -145,18 +146,18 @@ var btn2 = document.getElementById("open2");
 
 var upload = document.getElementById("addImage");
 upload.onclick = function(event) {
-  var one = document.getElementById("onee");
+  var firstModalContent = document.getElementById("firstModalContent");
   var blocImage = document.getElementById("bloc-image");
-  one.style.display = "none";
+  firstModalContent.style.display = "none";
   blocImage.style.display = "block";
 }
 
 
 var retour = document.getElementById("fa-arrow-left");
 retour.onclick = function(event) {
-  var one = document.getElementById("onee");
+  var firstModalContent = document.getElementById("firstModalContent");
   var blocImage = document.getElementById("bloc-image");
-  one.style.display = "block";
+  firstModalContent.style.display = "block";
   blocImage.style.display = "none";
 }
 
@@ -164,17 +165,16 @@ retour.onclick = function(event) {
 window.onclick = function(event) {
   if (event.target == modal) {
     modal.style.display = "none";
-    var one = document.getElementById("onee");
+    var firstModalContent = document.getElementById("firstModalContent");
     var blocImage = document.getElementById("bloc-image");
-    one.style.display = "block";
+    firstModalContent.style.display = "block";
     blocImage.style.display = "none";
   }
 }
 
 
 // Get the <span> element that closes the modal
-var close1 = document.getElementsByClassName("close")[0];
-var close2 = document.getElementsByClassName("close")[1];
+const close = document.getElementById("close");
 
 // When the user clicks on the button, open the modal
 btn.onclick = function() {
@@ -185,20 +185,14 @@ btn2.onclick = function() {
   modal.style.display = "block";
 }
 
-// When the user clicks on <span> (x), close the modal
-close1.onclick = function() {
-  modal.style.display = "none";
-}
 
-// When the user clicks on <span> (x), close the modal
-close2.onclick = function() {
+close.addEventListener('click', () => {
   modal.style.display = "none";
-  var one = document.getElementById("onee");
+  var firstModalContent = document.getElementById("firstModalContent");
     var blocImage = document.getElementById("bloc-image");
-    one.style.display = "block";
+    firstModalContent.style.display = "block";
     blocImage.style.display = "none";
-}
-
+});
 
 
 if(loginToken == undefined){
@@ -219,33 +213,53 @@ imageUpload.onchange = function(event){
   var reader = new FileReader();
   reader.onload = function() {
       var output = document.getElementById('image-preview');
-      console.log(output.innerHTML);
       output.innerHTML = '<img id="newImage" src="' + reader.result + '" alt="Image preview">';
-      console.log(output.innerHTML);
+      output.style.display = "block";  
+      const inpuut = document.getElementById('image-upload-bloc');    
+      inpuut.style.display = "none";
       
   }
   reader.readAsDataURL(event.target.files[0]);
 }
 
+ //remplacer les var par let
+var submit = document.getElementById("formImage");
 
-var addImage2 = document.getElementById("addImage2");
-
-addImage2.onclick = function(event){
-
-  event.preventDefault();
+submit.addEventListener('submit', (e) => {
 
 
-  var imageToSend = document.getElementById("newImage").src;
+  e.preventDefault();
+
+
+  var imageToSend = document.getElementById("newImage");
   var titleToSend = document.getElementById("title").value;
   var categoryToSend = document.getElementById("category").value;
 
 
-  fetch("http://localhost:5678/api/works/", {
-    method: "POST",
-    headers: { Authorization: "Bearer " + window.localStorage.getItem("loginToken"), "accept": "*/*", "Content-Type": "multipart/form-data" },
-    body: '{ "image": "' + imageToSend + '","title": "' + titleToSend + '","category": "' + categoryToSend + '" }'
+  var imageUpload2 = document.getElementById("image-upload");
 
+
+  console.log(imageUpload2.files[0]);
+
+
+
+  const name = document.getElementById("name");
+  const files = document.getElementById("files");
+  const formData = new FormData();
+  formData.append("title", titleToSend);
+  formData.append("category", categoryToSend);
+  formData.append("image", imageUpload2.files[0]);
+
+
+  fetch("http://localhost:5678/api/works", {
+    method: 'POST',
+    headers: { Authorization: "Bearer " + window.localStorage.getItem("loginToken") },
+    body: formData
 })
+    .then((res) => window.location.reload())
+    .catch((err) => console.log("Error occured", err));
+
+
 
   
-}
+})
