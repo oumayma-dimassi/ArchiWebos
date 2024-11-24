@@ -138,58 +138,63 @@ logout.addEventListener('click', () => {
 let modal = document.getElementById("myModal");
 
 // Get the button that opens the modal
-var btn = document.getElementById("open");
+let btn = document.getElementById("open");
 
 // Get the button 2 that opens the modal
-var btn2 = document.getElementById("open2");
+let btn2 = document.getElementById("open2");
 
 
-var upload = document.getElementById("addImage");
-upload.onclick = function(event) {
-  var firstModalContent = document.getElementById("firstModalContent");
-  var blocImage = document.getElementById("bloc-image");
+let upload = document.getElementById("addImage");
+upload.addEventListener('click', () => {
+  let firstModalContent = document.getElementById("firstModalContent");
+  let blocImage = document.getElementById("bloc-image");
   firstModalContent.style.display = "none";
   blocImage.style.display = "block";
-}
+});
 
 
-var retour = document.getElementById("fa-arrow-left");
-retour.onclick = function(event) {
-  var firstModalContent = document.getElementById("firstModalContent");
-  var blocImage = document.getElementById("bloc-image");
+upload.addEventListener('click', () => {
+
+});
+
+
+let retour = document.getElementById("fa-arrow-left");
+retour.addEventListener('click', () => {
+  let firstModalContent = document.getElementById("firstModalContent");
+  let blocImage = document.getElementById("bloc-image");
   firstModalContent.style.display = "block";
   blocImage.style.display = "none";
-}
+});
+
 
 // When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
+window.addEventListener('click', () => {
   if (event.target == modal) {
     modal.style.display = "none";
-    var firstModalContent = document.getElementById("firstModalContent");
-    var blocImage = document.getElementById("bloc-image");
+    let firstModalContent = document.getElementById("firstModalContent");
+    let blocImage = document.getElementById("bloc-image");
     firstModalContent.style.display = "block";
     blocImage.style.display = "none";
   }
-}
-
+});
 
 // Get the <span> element that closes the modal
 const close = document.getElementById("close");
 
 // When the user clicks on the button, open the modal
-btn.onclick = function() {
+window.addEventListener('click', () => {
   modal.style.display = "block";
-}
+});
 
-btn2.onclick = function() {
+window.addEventListener('click', () => {
   modal.style.display = "block";
-}
+});
 
 
 close.addEventListener('click', () => {
   modal.style.display = "none";
-  var firstModalContent = document.getElementById("firstModalContent");
-    var blocImage = document.getElementById("bloc-image");
+  let firstModalContent = document.getElementById("firstModalContent");
+  let blocImage = document.getElementById("bloc-image");
     firstModalContent.style.display = "block";
     blocImage.style.display = "none";
 });
@@ -207,12 +212,13 @@ if(loginToken == undefined){
 }
 
 
-var imageUpload = document.getElementById("image-upload");
+let imageUpload = document.getElementById("image-upload");
 
-imageUpload.onchange = function(event){
-  var reader = new FileReader();
+window.addEventListener('change', () => {
+
+  let reader = new FileReader();
   reader.onload = function() {
-      var output = document.getElementById('image-preview');
+      let output = document.getElementById('image-preview');
       output.innerHTML = '<img id="newImage" src="' + reader.result + '" alt="Image preview">';
       output.style.display = "block";  
       const inpuut = document.getElementById('image-upload-bloc');    
@@ -220,35 +226,25 @@ imageUpload.onchange = function(event){
       
   }
   reader.readAsDataURL(event.target.files[0]);
-}
+
+});
 
  //remplacer les var par let
-var submit = document.getElementById("formImage");
+ let submit = document.getElementById("formImage");
 
 submit.addEventListener('submit', (e) => {
 
-
   e.preventDefault();
+  let titleToSend = document.getElementById("title").value;
+  let categoryToSend = document.getElementById("category").value;
+  let imageUpload = document.getElementById("image-upload");
 
 
-  var imageToSend = document.getElementById("newImage");
-  var titleToSend = document.getElementById("title").value;
-  var categoryToSend = document.getElementById("category").value;
-
-
-  var imageUpload2 = document.getElementById("image-upload");
-
-
-  console.log(imageUpload2.files[0]);
-
-
-
-  const name = document.getElementById("name");
   const files = document.getElementById("files");
   const formData = new FormData();
   formData.append("title", titleToSend);
   formData.append("category", categoryToSend);
-  formData.append("image", imageUpload2.files[0]);
+  formData.append("image", imageUpload.files[0]);
 
 
   fetch("http://localhost:5678/api/works", {
@@ -258,8 +254,5 @@ submit.addEventListener('submit', (e) => {
 })
     .then((res) => window.location.reload())
     .catch((err) => console.log("Error occured", err));
-
-
-
   
 })
