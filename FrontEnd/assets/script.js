@@ -213,18 +213,17 @@ if(loginToken == undefined){
 
 
 let imageUpload = document.getElementById("image-upload");
-
+let output = document.getElementById('image-preview');
+output.style.display = "none";
 window.addEventListener('change', () => {
-
   let reader = new FileReader();
-  reader.onload = function() {
-      let output = document.getElementById('image-preview');
-      output.innerHTML = '<img id="newImage" src="' + reader.result + '" alt="Image preview">';
-      output.style.display = "block";  
-      const inpuut = document.getElementById('image-upload-bloc');    
-      inpuut.style.display = "none";
-      
-  }
+  reader.addEventListener('load', () => {
+    output.innerHTML = '<img id="newImage" src="' + reader.result + '" alt="Image preview">';
+    output.style.display = "flex";  
+    const inpuut = document.getElementById('image-upload-bloc');    
+    inpuut.style.display = "none";
+  });
+
   reader.readAsDataURL(event.target.files[0]);
 
 });
@@ -255,4 +254,4 @@ submit.addEventListener('submit', (e) => {
     .then((res) => window.location.reload())
     .catch((err) => console.log("Error occured", err));
   
-})
+});
