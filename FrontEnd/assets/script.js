@@ -153,10 +153,6 @@ upload.addEventListener('click', () => {
 });
 
 
-upload.addEventListener('click', () => {
-
-});
-
 
 let retour = document.getElementById("fa-arrow-left");
 retour.addEventListener('click', () => {
@@ -182,11 +178,11 @@ window.addEventListener('click', () => {
 const close = document.getElementById("close");
 
 // When the user clicks on the button, open the modal
-window.addEventListener('click', () => {
+btn.addEventListener('click', () => {
   modal.style.display = "block";
 });
 
-window.addEventListener('click', () => {
+btn2.addEventListener('click', () => {
   modal.style.display = "block";
 });
 
