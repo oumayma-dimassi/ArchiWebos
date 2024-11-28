@@ -1,15 +1,22 @@
-let ApiWorksResponse = await fetch('http://localhost:5678/api/works');
+let url='http://localhost:5678/api/works'
+let ApiWorksResponse = await fetch(url);
+
 let allWorks = await ApiWorksResponse.json();
 
 
 const login = document.getElementById("login");
+
 const logout = document.getElementById("logout");
+
 const header = document.getElementById("header");
+
 const categories = document.getElementById("categories");
 
-const gallery = document.getElementById("gallery");
 const modal_gallery = document.getElementById("modal_gallery");
 
+const gallery = document.getElementById("gallery");
+
+// afficher tous les travaux recuperé via le fetch de la ligne 1 et 2
 displayWorks(allWorks);
 
 function displayWorks(works) {
@@ -26,31 +33,37 @@ function displayWorks(works) {
 
         const figcaption = document.createElement("figcaption");
         const trash = document.createElement("i");
-        //<i class="fa fa-trash" aria-hidden="true"></i>
+        
         trash.classList.add("fa-trash");
         trash.classList.add("fa");
         trash.id = works[i].id;
 
+        // création d'un addEventListener listner sur le click au icon trash
+        // appel de api DELETE http://localhost:5678/api/works/ en mettant l'id de travaux à supprimer
+        // l'ajout de token dans le header est obligatoire
+        // token est recupéré au moment de login
         trash.addEventListener('click', (event) => {
 
-
-
-          fetch("http://localhost:5678/api/works/" + event.target.id, {
+        fetch(url + event.target.id, {
             method: "DELETE",
             headers: { Authorization: "Bearer " + window.localStorage.getItem("loginToken"), "accept": "*/*" }
         })
 
 
+        // event.target.id est l'id de travaux, il est stocké au moment de création de l'icon trash dans la ligne 37
         const eventId = event.target.id;
 
+        // au moment de la supprission de travaux, on doit supprimer l'icon trash correspondant à travers .style.display = "none"
         event.target.style.display = "none";
+        // on parcours toutes la liste des travaux, et on prends que les travaux restants à travers work.id != eventId
         const filtredWorks = allWorks.filter(work => work.id != eventId);
         allWorks = filtredWorks;
-        displayWorks(filtredWorks);
-          
+        // aprés avoir filtrer la liste, on devrait afficher la nouvelle liste
+        displayWorks(filtredWorks); 
         })
 
 
+        // le reste de la méthode est l'affichage des travaux , en mettant les titres et l'id et les images
         figcaption.innerHTML = works[i].title;
         image.src = works[i].imageUrl;
         image.alt = works[i].title;
@@ -71,8 +84,6 @@ function displayWorks(works) {
         modal_gallery.appendChild(figure2);
     }
 }
-
-
 
 
 function getcategories(){
@@ -132,8 +143,6 @@ logout.addEventListener('click', () => {
   window.localStorage.removeItem("loginToken");
 });
 
-
-
 // Get the modal
 let modal = document.getElementById("myModal");
 
@@ -152,8 +161,7 @@ upload.addEventListener('click', () => {
   blocImage.style.display = "block";
 });
 
-
-
+// action pour revenir à la 1er page de modal
 let retour = document.getElementById("fa-arrow-left");
 retour.addEventListener('click', () => {
   let firstModalContent = document.getElementById("firstModalContent");
@@ -163,8 +171,8 @@ retour.addEventListener('click', () => {
 });
 
 
-// When the user clicks anywhere outside of the modal, close it
-window.addEventListener('click', () => {
+// ajouter un listner pour cacher le modal si on clique ailleurs
+window.addEventListener('click', (event) => {
   if (event.target == modal) {
     modal.style.display = "none";
     let firstModalContent = document.getElementById("firstModalContent");
@@ -172,12 +180,26 @@ window.addEventListener('click', () => {
     firstModalContent.style.display = "block";
     blocImage.style.display = "none";
   }
+
+  const titleToSend = document.getElementById("title").value;
+  const categoryToSend = document.getElementById("category").value;
+  const imageUpload = document.getElementById("image-upload");
+
+
+  if(titleToSend  != "" && categoryToSend != 0 && imageUpload.files != undefined && imageUpload.files.length > 0){
+    const submit = document.getElementById('submit'); 
+    submit.disabled = false;
+    submit.classList.remove("disabledSubmit");
+  }else{
+    submit.disabled = true;
+    submit.classList.add("disabledSubmit");
+  }
+
 });
 
-// Get the <span> element that closes the modal
-const close = document.getElementById("close");
 
-// When the user clicks on the button, open the modal
+
+// les deux icons pour ouvrir le modal
 btn.addEventListener('click', () => {
   modal.style.display = "block";
 });
@@ -187,6 +209,9 @@ btn2.addEventListener('click', () => {
 });
 
 
+// icon pour fermer le modal, et rendre le 1er page la page principale, comme ça si on affiche le modal, on trouves tous les travaux
+const close = document.getElementById("close");
+// action pour fermer le modal
 close.addEventListener('click', () => {
   modal.style.display = "none";
   let firstModalContent = document.getElementById("firstModalContent");
@@ -195,7 +220,8 @@ close.addEventListener('click', () => {
     blocImage.style.display = "none";
 });
 
-
+// si on a le token , on affiche le bouton logout avec la possibilités d'ajouter des travaux
+// si on a pas le token, on affiche le bouton login avec les filtres des recherches
 if(loginToken == undefined){
   logout.style.display = "none";
   header.style.display = "none";
@@ -207,11 +233,11 @@ if(loginToken == undefined){
    getcategoriesSelection();
 }
 
-
+// action pour ajouter l'image et l'afficher dans le modal
 let imageUpload = document.getElementById("image-upload");
 let output = document.getElementById('image-preview');
 output.style.display = "none";
-window.addEventListener('change', () => {
+window.addEventListener('change', (event) => {
   let reader = new FileReader();
   reader.addEventListener('load', () => {
     output.innerHTML = '<img id="newImage" src="' + reader.result + '" alt="Image preview">';
@@ -220,29 +246,27 @@ window.addEventListener('change', () => {
     inpuut.style.display = "none";
   });
 
-  reader.readAsDataURL(event.target.files[0]);
-
+  if(event.target.files != undefined){
+    reader.readAsDataURL(event.target.files[0]);
+  }
 });
 
- //remplacer les var par let
- let submit = document.getElementById("formImage");
 
-submit.addEventListener('submit', (e) => {
+let formImage = document.getElementById("formImage");
+// action api pour ajouter image dans la base de données
+formImage.addEventListener('submit', (e) => {
 
   e.preventDefault();
   let titleToSend = document.getElementById("title").value;
   let categoryToSend = document.getElementById("category").value;
   let imageUpload = document.getElementById("image-upload");
 
-
-  const files = document.getElementById("files");
   const formData = new FormData();
   formData.append("title", titleToSend);
   formData.append("category", categoryToSend);
   formData.append("image", imageUpload.files[0]);
 
-
-  fetch("http://localhost:5678/api/works", {
+  fetch(url, {
     method: 'POST',
     headers: { Authorization: "Bearer " + window.localStorage.getItem("loginToken") },
     body: formData
