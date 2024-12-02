@@ -1,22 +1,13 @@
 let url='http://localhost:5678/api/works'
 let ApiWorksResponse = await fetch(url);
-
 let allWorks = await ApiWorksResponse.json();
 
 
-const login = document.getElementById("login");
-
-const logout = document.getElementById("logout");
-
-const header = document.getElementById("header");
-
-const categories = document.getElementById("categories");
-
-const modal_gallery = document.getElementById("modal_gallery");
 
 const gallery = document.getElementById("gallery");
+const modal_gallery = document.getElementById("modal_gallery");
 
-// afficher tous les travaux recuperé via le fetch de la ligne 1 et 2
+// afficher tous les travaux recuperé via le fetch
 displayWorks(allWorks);
 
 function displayWorks(works) {
@@ -86,6 +77,70 @@ function displayWorks(works) {
 }
 
 
+
+
+
+// action pour revenir à la 1er page de modal
+let retour = document.getElementById("fa-arrow-left");
+retour.addEventListener('click', () => {
+  let firstModalContent = document.getElementById("firstModalContent");
+  let blocImage = document.getElementById("bloc-image");
+  firstModalContent.style.display = "block";
+  blocImage.style.display = "none";
+});
+
+
+
+// récupérer la  modal
+let modal = document.getElementById("myModal");
+
+// récupérer le bouton qui ouvre la  modal
+let openModal = document.getElementById("open");
+
+// récupérer le bouton qui ouvre la  modal
+let openModal2 = document.getElementById("open2");
+
+
+// les deux icons pour ouvrir le modal
+openModal.addEventListener('click', () => {
+  modal.style.display = "block";
+});
+
+openModal2.addEventListener('click', () => {
+  modal.style.display = "block";
+});
+
+
+
+
+const categories = document.getElementById("categories");
+const header = document.getElementById("header");
+const logout = document.getElementById("logout");
+const login = document.getElementById("login");
+
+
+// si on a le token , on affiche le bouton logout avec la possibilités d'ajouter des travaux
+// si on a pas le token, on affiche le bouton login avec les filtres des recherches
+const loginToken = window.localStorage.getItem("loginToken");
+
+if(loginToken == undefined){
+  logout.style.display = "none";
+  header.style.display = "none";
+  openModal.style.display = "none";
+  getcategories();
+}else{
+   login.style.display = "none";
+   categories.style.display = "none";
+   getcategoriesSelection();
+}
+
+logout.addEventListener('click', () => {
+  window.localStorage.removeItem("loginToken");
+});
+
+
+
+// afficher les photos des catégories avec les boutons spécifique
 function getcategories(){
   fetch('http://localhost:5678/api/categories')
   .then(response => response.json())
@@ -98,7 +153,7 @@ function getcategories(){
         button.className = "category";
         categories.appendChild(button);
       }
-
+       //selectioner le bouton cliquer par l'utilisateur et filtrer les photos 
        const allCategories = document.querySelectorAll(".category");
 
        allCategories.forEach(category =>{
@@ -119,6 +174,9 @@ function getcategories(){
     });
 }
 
+
+
+//récupérer les option de catégorie de modal[ajout photo] 
 function getcategoriesSelection(){
   fetch('http://localhost:5678/api/categories')
   .then(response => response.json())
@@ -137,101 +195,16 @@ function getcategoriesSelection(){
 
 
 
-const loginToken = window.localStorage.getItem("loginToken");
-
-logout.addEventListener('click', () => {
-  window.localStorage.removeItem("loginToken");
-});
-
-// Get the modal
-let modal = document.getElementById("myModal");
-
-// Get the button that opens the modal
-let btn = document.getElementById("open");
-
-// Get the button 2 that opens the modal
-let btn2 = document.getElementById("open2");
-
-
-let upload = document.getElementById("addImage");
-upload.addEventListener('click', () => {
+// masquer la premiére version de modal et afficher la seconde version  [ajout photo] 
+let goSecondModal = document.getElementById("goSecondModal");
+goSecondModal.addEventListener('click', () => {
   let firstModalContent = document.getElementById("firstModalContent");
   let blocImage = document.getElementById("bloc-image");
   firstModalContent.style.display = "none";
   blocImage.style.display = "block";
 });
 
-// action pour revenir à la 1er page de modal
-let retour = document.getElementById("fa-arrow-left");
-retour.addEventListener('click', () => {
-  let firstModalContent = document.getElementById("firstModalContent");
-  let blocImage = document.getElementById("bloc-image");
-  firstModalContent.style.display = "block";
-  blocImage.style.display = "none";
-});
 
-
-// ajouter un listner pour cacher le modal si on clique ailleurs
-window.addEventListener('click', (event) => {
-  if (event.target == modal) {
-    modal.style.display = "none";
-    let firstModalContent = document.getElementById("firstModalContent");
-    let blocImage = document.getElementById("bloc-image");
-    firstModalContent.style.display = "block";
-    blocImage.style.display = "none";
-  }
-
-  const titleToSend = document.getElementById("title").value;
-  const categoryToSend = document.getElementById("category").value;
-  const imageUpload = document.getElementById("image-upload");
-
-
-  if(titleToSend  != "" && categoryToSend != 0 && imageUpload.files != undefined && imageUpload.files.length > 0){
-    const submit = document.getElementById('submit'); 
-    submit.disabled = false;
-    submit.classList.remove("disabledSubmit");
-  }else{
-    submit.disabled = true;
-    submit.classList.add("disabledSubmit");
-  }
-
-});
-
-
-
-// les deux icons pour ouvrir le modal
-btn.addEventListener('click', () => {
-  modal.style.display = "block";
-});
-
-btn2.addEventListener('click', () => {
-  modal.style.display = "block";
-});
-
-
-// icon pour fermer le modal, et rendre le 1er page la page principale, comme ça si on affiche le modal, on trouves tous les travaux
-const close = document.getElementById("close");
-// action pour fermer le modal
-close.addEventListener('click', () => {
-  modal.style.display = "none";
-  let firstModalContent = document.getElementById("firstModalContent");
-  let blocImage = document.getElementById("bloc-image");
-    firstModalContent.style.display = "block";
-    blocImage.style.display = "none";
-});
-
-// si on a le token , on affiche le bouton logout avec la possibilités d'ajouter des travaux
-// si on a pas le token, on affiche le bouton login avec les filtres des recherches
-if(loginToken == undefined){
-  logout.style.display = "none";
-  header.style.display = "none";
-  btn.style.display = "none";
-  getcategories();
-}else{
-   login.style.display = "none";
-   categories.style.display = "none";
-   getcategoriesSelection();
-}
 
 // action pour ajouter l'image et l'afficher dans le modal
 let imageUpload = document.getElementById("image-upload");
@@ -274,4 +247,43 @@ formImage.addEventListener('submit', (e) => {
     .then((res) => window.location.reload())
     .catch((err) => console.log("Error occured", err));
   
+});
+
+
+
+// icon pour fermer le modal, et rendre le 1er page la page principale, comme ça si on affiche le modal, on trouves tous les travaux
+const close = document.getElementById("close");
+// action pour fermer le modal
+close.addEventListener('click', () => {
+  modal.style.display = "none";
+  let firstModalContent = document.getElementById("firstModalContent");
+  let blocImage = document.getElementById("bloc-image");
+    firstModalContent.style.display = "block";
+    blocImage.style.display = "none";
+});
+
+
+// ajouter un listner pour cacher le modal si on clique ailleurs
+window.addEventListener('click', (event) => {
+  if (event.target == modal) {
+    modal.style.display = "none";
+    let firstModalContent = document.getElementById("firstModalContent");
+    let blocImage = document.getElementById("bloc-image");
+    firstModalContent.style.display = "block";
+    blocImage.style.display = "none";
+  }
+
+  const titleToSend = document.getElementById("title").value;
+  const categoryToSend = document.getElementById("category").value;
+  const imageUpload = document.getElementById("image-upload");
+
+  if(titleToSend  != "" && categoryToSend != 0 && imageUpload.files != undefined && imageUpload.files.length > 0){
+    const submit = document.getElementById('submit'); 
+    submit.disabled = false;
+    submit.classList.remove("disabledSubmit");
+  }else{
+    submit.disabled = true;
+    submit.classList.add("disabledSubmit");
+  }
+
 });
