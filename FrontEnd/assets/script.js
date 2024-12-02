@@ -35,7 +35,7 @@ function displayWorks(works) {
         // token est recupéré au moment de login
         trash.addEventListener('click', (event) => {
 
-        fetch(url + event.target.id, {
+        fetch(url + "/" + event.target.id, {
             method: "DELETE",
             headers: { Authorization: "Bearer " + window.localStorage.getItem("loginToken"), "accept": "*/*" }
         })
