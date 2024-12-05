@@ -193,10 +193,12 @@ formImage.addEventListener('submit', (e) => {
 
     displayWork(data);
     formImage.reset();
+    
 
     output.style.display = "none";  
     const inpuut = document.getElementById('image-upload-bloc');    
     inpuut.style.display = "flex";
+    allWorks.push(data);
 
   })
   .catch((err) => console.log("Error occured", err));
