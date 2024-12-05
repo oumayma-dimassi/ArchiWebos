@@ -16,67 +16,9 @@ function displayWorks(works) {
   modal_gallery.replaceChildren();
 
   for (let i = 0; i < works.length; i++) {
-        const figure = document.createElement("figure");
-        const figure2 = document.createElement("figure");
-
-        const image = document.createElement("img");
-        const image2 = document.createElement("img");
-
-        const figcaption = document.createElement("figcaption");
-        const trash = document.createElement("i");
-        
-        trash.classList.add("fa-trash");
-        trash.classList.add("fa");
-        trash.id = works[i].id;
-
-        // création d'un addEventListener listner sur le click au icon trash
-        // appel de api DELETE http://localhost:5678/api/works/ en mettant l'id de travaux à supprimer
-        // l'ajout de token dans le header est obligatoire
-        // token est recupéré au moment de login
-        trash.addEventListener('click', (event) => {
-
-        fetch(url + "/" + event.target.id, {
-            method: "DELETE",
-            headers: { Authorization: "Bearer " + window.localStorage.getItem("loginToken"), "accept": "*/*" }
-        })
-
-
-        // event.target.id est l'id de travaux, il est stocké au moment de création de l'icon trash dans la ligne 37
-        const eventId = event.target.id;
-
-        // au moment de la supprission de travaux, on doit supprimer l'icon trash correspondant à travers .style.display = "none"
-        event.target.style.display = "none";
-        // on parcours toutes la liste des travaux, et on prends que les travaux restants à travers work.id != eventId
-        const filtredWorks = allWorks.filter(work => work.id != eventId);
-        allWorks = filtredWorks;
-        // aprés avoir filtrer la liste, on devrait afficher la nouvelle liste
-        displayWorks(filtredWorks); 
-        })
-
-
-        // le reste de la méthode est l'affichage des travaux , en mettant les titres et l'id et les images
-        figcaption.innerHTML = works[i].title;
-        image.src = works[i].imageUrl;
-        image.alt = works[i].title;
-
-        image2.src = works[i].imageUrl;
-        image2.alt = works[i].title;
-        image2.id = works[i].id;
-  
-        figure.appendChild(image);
-        
-        figure2.appendChild(trash);
-        figure2.appendChild(image2);
-        
-        figure.appendChild(figcaption);
-        
-        gallery.appendChild(figure);
-        
-        modal_gallery.appendChild(figure2);
+        displayWork(works[i]);
     }
 }
-
-
 
 
 
@@ -171,7 +113,8 @@ function getcategories(){
         }
         })
        });
-    });
+    })
+    .catch((err) => console.log("Error occured", err));
 }
 
 
@@ -190,7 +133,8 @@ function getcategoriesSelection(){
         optionElement.innerHTML = data[i].name;
         category.appendChild(optionElement);
       }
-    });
+    })
+    .catch((err) => console.log("Error occured", err));
 }
 
 
@@ -244,8 +188,18 @@ formImage.addEventListener('submit', (e) => {
     headers: { Authorization: "Bearer " + window.localStorage.getItem("loginToken") },
     body: formData
 })
-    .then((res) => window.location.reload())
-    .catch((err) => console.log("Error occured", err));
+  .then(response => response.json())
+  .then(data => {
+
+    displayWork(data);
+    formImage.reset();
+
+    output.style.display = "none";  
+    const inpuut = document.getElementById('image-upload-bloc');    
+    inpuut.style.display = "flex";
+
+  })
+  .catch((err) => console.log("Error occured", err));
   
 });
 
@@ -287,3 +241,64 @@ window.addEventListener('click', (event) => {
   }
 
 });
+
+
+function displayWork(data){
+
+  const figure = document.createElement("figure");
+  const figure2 = document.createElement("figure");
+
+  const image = document.createElement("img");
+  const image2 = document.createElement("img");
+
+  const figcaption = document.createElement("figcaption");
+  const trash = document.createElement("i");
+  
+  trash.classList.add("fa-trash");
+  trash.classList.add("fa");
+  trash.id = data.id;
+
+        // création d'un addEventListener listner sur le click au icon trash
+        // appel de api DELETE http://localhost:5678/api/works/ en mettant l'id de travaux à supprimer
+        // l'ajout de token dans le header est obligatoire
+        // token est recupéré au moment de login
+        trash.addEventListener('click', (event) => {
+
+          fetch(url + "/" + event.target.id, {
+              method: "DELETE",
+              headers: { Authorization: "Bearer " + window.localStorage.getItem("loginToken"), "accept": "*/*" }
+          })
+          .catch((err) => console.log("Error occured", err));
+  
+  
+          // event.target.id est l'id de travaux, il est stocké au moment de création de l'icon trash dans la ligne 37
+          const eventId = event.target.id;
+  
+          // au moment de la supprission de travaux, on doit supprimer l'icon trash correspondant à travers .style.display = "none"
+          event.target.style.display = "none";
+          // on parcours toutes la liste des travaux, et on prends que les travaux restants à travers work.id != eventId
+          const filtredWorks = allWorks.filter(work => work.id != eventId);
+          allWorks = filtredWorks;
+          // aprés avoir filtrer la liste, on devrait afficher la nouvelle liste
+          displayWorks(filtredWorks); 
+          })
+
+  figcaption.innerHTML = data.title;
+  image.src = data.imageUrl;
+  image.alt = data.title;
+
+  image2.src = data.imageUrl;
+  image2.alt = data.title;
+  image2.id = data.id;
+
+  figure.appendChild(image);
+  
+  figure2.appendChild(trash);
+  figure2.appendChild(image2);
+  
+  figure.appendChild(figcaption);
+  
+  gallery.appendChild(figure);
+  
+  modal_gallery.appendChild(figure2);
+}

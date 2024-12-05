@@ -20,7 +20,8 @@ loginForm.addEventListener("submit", (e) => {
           window.localStorage.setItem("loginToken", data.token);
           window.location = "/";
       }
-  } );
+  } )
+  .catch((err) => console.log("Error occured", err));
 
 
 });
